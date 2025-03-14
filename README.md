@@ -20,6 +20,6 @@ Your python script for the uploadCSV.php may NOT work depending on what command 
 <br>On line 12 of the displayTable.php change this line of code to the command you use to call python programs
 <br>$command = "py apptest.py " . escapeshellarg($filePath) . " 2>&1"; // Capture errors
 <br>$output = shell_exec($command);
-<br>Change "py apptest.py" to the comman your computer uses to call this script
+<br>Change "py apptest.py" to the command your computer uses to call this script
 <br>If you have a command prompt or powershell inside the directory where "apptest.py" is located you can try commands to see which one executes the program
 <br>Common commands are (py, python, python3)
