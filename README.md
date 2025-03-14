@@ -10,14 +10,13 @@ To make the Python code to work in your system you need to do the following
 <br>Make sure pip is installed with this command pip --version
 <br>If no install is detected do these steps based on your OS
 # Windows
-
 <br>run this line to install the dependencies needed to run the python script: pip install pandas mysql-connector-python dateparser spacy validators python-dateutil
 <br>When running the software you need to setup certain variables in the code for it to actually run on your computer
 # Connecting to the database
 There are lines of code you have to change due to how your database may be set up
-
+<br>In the 'include' folder of the project, there is a file called db.php, please change it to the login of YOUR database
 # Running the Python Script
-<br>Your python script may NOT work depending on what command you need to run python
+Your python script for the uploadCSV.php may NOT work depending on what command you need to run python
 <br>On line 12 of the displayTable.php change this line of code to the command you use to call python programs
 <br>$command = "py apptest.py " . escapeshellarg($filePath) . " 2>&1"; // Capture errors
 <br>$output = shell_exec($command);
