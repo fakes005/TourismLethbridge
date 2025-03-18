@@ -75,36 +75,55 @@ require_once("../includes/authorization.php"); // only admin authorized to this 
 </head>
 <body>
     <div class="popup-content">
+       
         <h1>Add Venue</h1>
         
+      
         <form action="addVenue.php" method="post">
+            
+            <!-- Input field for venue name -->
             <label for="venue_name">Venue Name:</label>
             <input id="venue_name" type="text" maxlength="50" name="venue_name" required>
+            
+          
             <label for="venue_address">Venue Address:</label>
             <input id="venue_address" type="text" maxlength="150" name="venue_address">
+          
             <input type="submit" name="submit" value="Add Venue">
         </form>
 
         <?php
+        // Check if the form is submitted using POST method
         if($_SERVER["REQUEST_METHOD"] == "POST"){
+            
+            // Ensure the venue name field is not empty before processing
             if(!empty($_POST["venue_name"])){
+                
+                // Trim extra spaces from input values
                 $vName = trim($_POST["venue_name"]);
                 $vAddress = trim($_POST["venue_address"]);
 
+                // Validate input data
                 validateInput("venue_name", $vName);
                 validateInput("venue_address", $vAddress);
+                
+                // Insert the venue into the database
                 insertVenue($conn, $vName, $vAddress);
+                
+                // Display success message
                 echo "<p style='color:green; text-align:center;'>Venue added successfully!</p>";
             } else {
+                // Display error message if venue name is empty
                 echo "<p style='color:red; text-align:center;'>Please enter a Venue Name at least!</p>";
             }
         }
         ?>
 
         <?php
-        // Close the connection
+        // Close the database connection
         $pdo = null;
         ?>
     </div>
 </body>
 </html>
+
