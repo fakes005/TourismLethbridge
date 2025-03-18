@@ -115,8 +115,10 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
     <div class="container">
         <h1 class="mt-4">View Report</h1>
         <br>
+        
+        <!-- Table to display event reports -->
         <table class="table table-bordered dataTable" id="reportTable">
-            <thead >
+            <thead>
                 <tr>
                     <th>Event Name</th>
                     <th>Event Venue</th>
@@ -130,15 +132,18 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
             <tbody>
                 <?php
                 try {
+                    // Query to fetch event details from database using JOINs
                     $query = "SELECT events.event_name, events.event_startdate, events.event_enddate, 
                                      venues.venue_name, venues.venue_address, users.user_name, events.event_attendance
                               FROM events 
                               JOIN venues ON events.venue_id = venues.venue_id
                               JOIN users ON events.user_id = users.user_id";
-
+                    
+                    // Prepare and execute the query
                     $stmt = $conn->prepare($query);
                     $stmt->execute();
 
+                    // Loop through the result set and display event details
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         echo "<tr>";
                         echo "<td>" . htmlentities($row['event_name']) . "</td>";
@@ -151,6 +156,7 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
                         echo "</tr>";
                     }
                 } catch (PDOException $e) {
+                    // Handle SQL errors gracefully and log them for debugging
                     echo "<tr><td colspan='7' class='text-danger'>Error retrieving data</td></tr>";
                     error_log("SQL Error: " . $e->getMessage());
                 }
@@ -158,6 +164,7 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
             </tbody>
             <tfoot>
                 <tr>
+                    <!-- Footer row to display total attendance count -->
                     <td colspan="6" class="text-end fw-bold">Total Attendance:</td>
                     <td id="totalAttendance" class="fw-bold"></td>
                 </tr>
@@ -165,24 +172,29 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
         </table>
     </div>
 
-    <!-- jQuery and DataTables Scripts -->
+    <!-- jQuery and DataTables JavaScript for dynamic table functionalities -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
 
     <script>
         $(document).ready(function() {
+            // Initialize DataTable with sorting and custom configurations
             let table = $('#reportTable').DataTable({
-                "order": [[3, "asc"]],  // Sort by Start Date by default
+                "order": [[3, "asc"]],  // Default sorting by Start Date
                 "columnDefs": [
-                    { "type": "date", "targets": [3, 4] },  // Ensure correct date sorting
-                    { "type": "num", "targets": [6] }  // Ensure numeric sorting for Attendance
+                    { "type": "date", "targets": [3, 4] },  // Ensure correct date sorting for Start and End Date
+                    { "type": "num", "targets": [6] }  // Ensure numeric sorting for Attendance column
                 ],
                 "footerCallback": function(row, data, start, end, display) {
                     let api = this.api();
+                    
+                    // Calculate total attendance from the displayed rows
                     let total = api.column(6, { page: 'current' }).data().reduce((a, b) => {
                         return (parseInt(a) || 0) + (parseInt(b) || 0);
                     }, 0);
-                    $(api.column(6).footer()).html(total); // Update the footer with total
+                    
+                    // Update the footer with the calculated total attendance
+                    $(api.column(6).footer()).html(total);
                 }
             });
         });
