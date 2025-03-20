@@ -57,6 +57,9 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
             padding: 0;
             background-color: white;
             text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
         }
 
        
@@ -65,6 +68,8 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
             justify-content: space-between;
             align-items: center;
             background-color: white;
+            width: 100%;
+            padding: 10px 20px;
         }
 
         nav h1 {
@@ -78,6 +83,7 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
             list-style: none;
             margin: 0;
             padding: 0;
+            gap: 10px;
         }
 
         .nav-right li {
@@ -95,8 +101,155 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
         }
 
         .nav-right a:hover {
-            background-color: #ffc20e; 
+            background-color: #ffc20e;
+            border-radius: 8px;
+            padding: 12px 17px;
         }
+container {
+            display: flex;
+            justify-content: space-between;
+            width: 90%;
+            margin-top: 20px;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: repeat(3, 225px);
+            gap: 60px;
+            padding: 20px;
+            justify-content: left;
+            flex: 1;
+        }
+
+        .card {
+            background: black;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            transition: transform 0.2s ease-in-out;
+            cursor: pointer;
+            height: 150px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .card:hover {
+            transform: scale(1.05);
+        }
+
+        .card img {
+            width: 100px;
+            height: 100px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+
+        .card h3 {
+            margin: 10px 0 0;
+            font-size: 16px;
+            color: white;
+        }
+
+        #event-list-container {
+            background: black;
+            color: white;
+            padding: 15px;
+            border-radius: 10px;
+            width: 30%;
+            max-height: 500px;
+            overflow-y: auto;
+            position: relative;
+			text-align: left;
+        }
+		
+		.event-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    border-bottom: 1px solid white;
+    font-size: 14px;
+}
+
+.event-date {
+    font-weight: bold;
+    width: 50px;
+    text-align: center;
+}
+
+.event-details {
+    flex-grow: 1;
+    padding-left: 10px;
+}
+
+.event-details strong {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+        .login_logo {
+            width: 55px;
+            height: auto;
+        }
+
+        input[type="file"] {
+            display: none;
+        }
+		
+		nav h1 {
+    margin-left: 90px;
+	
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;  /* Removes the space between borders */
+}
+
+th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #fff; /* Horizontal line between rows */
+}
+
+th {
+    background-color: black;
+    color: #ffc20e;
+    font-weight: bold;
+}
+
+td {
+    color: white;
+}
+
+td .event-name {
+    font-weight: bold;
+}
+
+
+
+#popupContainer {
+    width: 218px;
+    max-width: 300px;
+    height: 101vh;
+    max-height: 101vh;
+    
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: #5c9cd1;
+    padding: 20px;
+	overflow: auto;
+    
+    border-radius: 10px;
+}
+
+        
     </style>
 </head>
 
@@ -151,5 +304,81 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
             </div>
         </div>
     </main>
+ <!-- Upcoming Events Section -->
+        <div id="event-list-container">
+            <h2>Upcoming Events</h2>
+            <table id="event-list">
+				<thead>
+					<tr>
+						
+					<tr>
+				</thead>
+				<tbody>
+				
+				</tbody>
+			</table>
+			</div>
+						
+        
+    </div>
+
+    <script>
+ async function loadEvents() {
+            try {
+                const response = await fetch("http://localhost/projectFolder/admin/get_events.php");
+                const events = await response.json();
+                const eventList = document.getElementById("event-list").getElementsByTagName("tbody")[0];
+                eventList.innerHTML = "";  // Clear existing events
+
+                if (events.length === 0) {
+                    const noEventsRow = document.createElement("tr");
+                    noEventsRow.innerHTML = "<td colspan='3'>No upcoming events.</td>";
+                    eventList.appendChild(noEventsRow);
+                    return;
+                }
+
+                events.forEach(event => {
+                    const row = document.createElement("tr");
+
+                    // Format date (Day and Month)
+                    const eventDate = new Date(event.event_startdate);
+                    const day = eventDate.getDate();
+                    const month = eventDate.toLocaleString('default', { month: 'short' });
+
+                    row.innerHTML = `
+                        <td>${day} ${month}</td>
+                        <td><span class="event-name">${event.event_name}</span></td>
+                        <td>${event.venue_name}</td>
+						<td><button onclick="openPopup(${event.event_id})">Edit</button></td>
+                    `;
+
+                    eventList.appendChild(row);
+                });
+            } catch (error) {
+                console.error("Error loading events:", error);
+            }
+        }
+		
+		function openPopup(eventId) {
+    let overlay = document.createElement("div");
+    overlay.id = "popupOverlay";
+    overlay.innerHTML = `
+        <div id="popupContainer">
+            <button id="closePopup" onclick="closePopup()">✖</button>
+            <iframe id="popupFrame" src="edit_event.php?event_id=${eventId}" frameborder="0"></iframe>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+}
+
+function closePopup() {
+    document.getElementById("popupOverlay").remove();
+}
+
+
+        document.addEventListener("DOMContentLoaded", loadEvents);
+
+    </script>
 </body>
 </html>
