@@ -15,7 +15,7 @@ $_SESSION['current_page'] = "event_listView.php";
     <title>Event List</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Hudson NY Pro", Arial, sans-serif;  /* if no hudson swtich to arial */
             background-color: white;
             color: black;
             margin: 0;
