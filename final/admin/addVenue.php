@@ -9,7 +9,7 @@ require_once("../includes/authorization.php"); // only admin authorized to this 
     <title>Add Venue</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Hudson NY Pro", Arial, sans-serif; /* change to arial if no hudson */
             margin: 0;
             padding: 20px;
             background-color: #5a9bd5; /* Match admin panel theme */
