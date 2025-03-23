@@ -6,7 +6,7 @@
     <title>Event List</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Hudson NY Pro", Arial, sans-serif; /* switch to arial if no hudson */
             background-color: white;
             color: black;
             margin: 0;
