@@ -52,7 +52,7 @@ $home_url = isset($_SESSION['current_page']) ? "../" . $_SESSION['current_page']
     <style>
      
         body {
-            font-family: Arial, sans-serif;
+            font-family: "Hudson NY Pro", Arial, sans-serif; /* switch to arial if no hudson */
             margin: 0;
             padding: 0;
             background-color: white;
