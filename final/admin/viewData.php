@@ -21,7 +21,7 @@ require_once("../includes/authorizeAdmin.php"); // only admin authorized to this
     #reportTable {
         border-collapse: collapse;
         width: 100%;
-        font-family: Arial, sans-serif;
+        font-family: "Hudson NY Pro", Arial, sans-serif; /* if hudson not there defaullt to arial */
         background-color: #f9f9f9;
     }
 
