@@ -17,7 +17,7 @@ require_once("../includes/authorizeAdmin.php");
         /* Styling for the page */
         body {
             text-align: center;
-            font-family: Arial, sans-serif;
+            font-family: "Hudson NY Pro", Arial, sans-serif; /* if no hudson change to arial */
             background-color: #5a9bd5; 
             color: black;
             overflow-x: hidden; /* Prevent horizontal scrolling */
